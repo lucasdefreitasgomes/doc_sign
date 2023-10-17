@@ -121,34 +121,36 @@
 
         const signatureCanvas = document.getElementById('signatureCanvas');
         const confirmSignatureButton = document.getElementById('confirmSignature');
-        const clearSignatureButton = document.getElementById('clearSignature');
         const placaSelect = document.getElementById('placaSelect');
         const lavagemTable = document.getElementById('lavagemTable').getElementsByTagName('tbody')[0];
-        const printButton = document.getElementById('printButton'); // Botão para salvar o PDF
+        const savePDFButton = document.getElementById('printButton'); // Botão para salvar o PDF
         const ctx = signatureCanvas.getContext('2d');
         let isDrawing = false;
 
-        // Função para limpar a assinatura
-        clearSignatureButton.addEventListener('click', () => {
-            ctx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
-        });
-
-        signatureCanvas.addEventListener('mousedown', () => {
+        // Funções para lidar com eventos de toque
+        function handleStart(event) {
             isDrawing = true;
+            const touch = event.touches[0];
             ctx.beginPath();
-            ctx.moveTo(event.clientX - signatureCanvas.getBoundingClientRect().left, event.clientY - signatureCanvas.getBoundingClientRect().top);
-        });
+            ctx.moveTo(touch.clientX - signatureCanvas.getBoundingClientRect().left, touch.clientY - signatureCanvas.getBoundingClientRect().top);
+        }
 
-        signatureCanvas.addEventListener('mousemove', () => {
+        function handleMove(event) {
             if (isDrawing) {
-                ctx.lineTo(event.clientX - signatureCanvas.getBoundingClientRect().left, event.clientY - signatureCanvas.getBoundingClientRect().top);
+                const touch = event.touches[0];
+                ctx.lineTo(touch.clientX - signatureCanvas.getBoundingClientRect().left, touch.clientY - signatureCanvas.getBoundingClientRect().top);
                 ctx.stroke();
             }
-        });
+        }
 
-        signatureCanvas.addEventListener('mouseup', () => {
+        function handleEnd() {
             isDrawing = false;
-        });
+        }
+
+        // Adicione manipuladores de eventos de toque
+        signatureCanvas.addEventListener('touchstart', handleStart, false);
+        signatureCanvas.addEventListener('touchmove', handleMove, false);
+        signatureCanvas.addEventListener('touchend', handleEnd, false);
 
         confirmSignatureButton.addEventListener('click', () => {
             const placaSelecionada = placaSelect.value;
