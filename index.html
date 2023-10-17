@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Lavagem de Veículos - Distribuição (CL FD)</title>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -76,6 +77,7 @@
         <div class="form-section">
             <div class="signature-container">
                 <canvas id="signatureCanvas" width="400" height="200"></canvas>
+                <button id="clearSignature">Limpar Assinatura</button>
             </div>
             <button id="confirmSignature">Confirmar Assinatura</button>
         </div>
@@ -117,15 +119,19 @@
             // Adicione as senhas para as outras placas conforme necessário
         };
 
-
-        // Restante do seu código
         const signatureCanvas = document.getElementById('signatureCanvas');
         const confirmSignatureButton = document.getElementById('confirmSignature');
+        const clearSignatureButton = document.getElementById('clearSignature');
         const placaSelect = document.getElementById('placaSelect');
         const lavagemTable = document.getElementById('lavagemTable').getElementsByTagName('tbody')[0];
-        const savePDFButton = document.getElementById('savePDF'); // Botão para salvar o PDF
+        const printButton = document.getElementById('printButton'); // Botão para salvar o PDF
         const ctx = signatureCanvas.getContext('2d');
         let isDrawing = false;
+
+        // Função para limpar a assinatura
+        clearSignatureButton.addEventListener('click', () => {
+            ctx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+        });
 
         signatureCanvas.addEventListener('mousedown', () => {
             isDrawing = true;
@@ -167,7 +173,7 @@
                 cell3.innerHTML = nomeMotorista;
 
                 // Habilitar o botão para salvar o PDF
-                savePDFButton.removeAttribute('disabled');
+                printButton.style.display = 'block';
             } else if (senhaInserida === null) {
                 // O motorista cancelou a entrada da senha
                 senhaErrada.style.display = 'none';
@@ -184,10 +190,11 @@
         });
 
         // Função para abrir a janela de impressão quando o botão de impressão for clicado
-        document.getElementById('printButton').addEventListener('click', function () {
+        printButton.addEventListener('click', function () {
+            printButton.style.display = 'none'; // Oculte o botão de impressão antes da impressão
             window.print();
+            printButton.style.display = 'block'; // Restaure o botão de impressão após a impressão
         });
-
     </script>
 </body>
 

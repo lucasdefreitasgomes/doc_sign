@@ -12,7 +12,7 @@ body {
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
-    border: 1px solid #ccc;
+    border: none; /* Removendo a borda */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -173,9 +173,9 @@ footer p {
         font-size: 10px;
     }
 
-    /* button {
+     button {
         display: none;
-    } */
+    }
 
     /* Outros estilos específicos de impressão, se necessário */
 }
