@@ -127,12 +127,21 @@
         const ctx = signatureCanvas.getContext('2d');
         let isDrawing = false;
 
-        // Funções para lidar com eventos de toque
+        // Variáveis para rastrear a posição inicial do toque
+        let touchStartX, touchStartY;
+
+        // Função para lidar com eventos de toque
         function handleStart(event) {
             isDrawing = true;
             const touch = event.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
             ctx.beginPath();
             ctx.moveTo(touch.clientX - signatureCanvas.getBoundingClientRect().left, touch.clientY - signatureCanvas.getBoundingClientRect().top);
+
+            // Impedir a rolagem da página enquanto a assinatura está ativa
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
         }
 
         function handleMove(event) {
@@ -140,14 +149,23 @@
                 const touch = event.touches[0];
                 ctx.lineTo(touch.clientX - signatureCanvas.getBoundingClientRect().left, touch.clientY - signatureCanvas.getBoundingClientRect().top);
                 ctx.stroke();
+
+                // Evitar o movimento da página enquanto você está assinando
+                const deltaX = touch.clientX - touchStartX;
+                const deltaY = touch.clientY - touchStartY;
+                window.scrollBy(-deltaX, -deltaY);
             }
         }
 
         function handleEnd() {
             isDrawing = false;
+
+            // Restaurar o comportamento normal de rolagem da página
+            document.body.style.overflow = 'auto';
+            document.body.style.position = 'static';
         }
 
-        // Adicione manipuladores de eventos de toque
+        // Adicionar manipuladores de eventos de toque
         signatureCanvas.addEventListener('touchstart', handleStart, false);
         signatureCanvas.addEventListener('touchmove', handleMove, false);
         signatureCanvas.addEventListener('touchend', handleEnd, false);
