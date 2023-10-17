@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Lavagem de Veículos - Distribuição (CL FD)</title>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <link rel="stylesheet" href="styles.css">
-</head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        .assinatura-container {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
 
+        .assinatura-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .cpf-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 15px;
+            display: inline-block;
+        }
+
+        .titulo {
+            font-size: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
 <body>
-    <div class="container">
+    <div class="container" id="container">
         <img class="logo" src="logo kuehne-nagel.png" alt="Logo Kuehne + Nagel">
         <table>
             <tr>
@@ -28,7 +52,7 @@
                 <td colspan="4"><strong>Aprovador:</strong> Tiago Garcia</td>
             </tr>
         </table>
-        <div class="form-section">
+        <div class "form-section">
             <h2>Instrução de Lavagem:</h2>
             <p>O produto utilizado na lavagem dos veículos (realizada de forma caseira) deve ser um produto neutro e sem
                 odor. Para a aplicação, o detergente neutro deve ser diluído em um recipiente com água, o qual
@@ -57,8 +81,8 @@
             <option value="EMO8I86">EMO8I86: IAN EUFRASIO BEZERRA</option>
             <option value="EPZ4H01">EPZ4H01: LUIZ DANIEL DE PONTES</option>
             <option value="FFN9B29">FFN9B29: WELLINGTON BUENO DA SILVA</option>
-            <option value="LSD3E66">LSD3E66: LEANDRO MORAU GOMES</option>
-            <option value="PWI3E56">PWI3E56: LEANDRO SILVEIRA REIS</option>
+            <option value="PWIE56">PWIE56: LEANDRO MORAU GOMES</option>
+            <option value="PWIE56">PWIE56: LEANDRO SILVEIRA REIS</option>
         </select>
         <p id="senhaErrada" style="color: red; display: none;">Senha incorreta!</p>
         <p id="senhaObrigatoria" style="color: red; display: none;">Por favor, digite a senha.</p>
@@ -75,14 +99,15 @@
             </tbody>
         </table>
         <div class="form-section">
-            <div class="signature-container">
-                <canvas id="signatureCanvas" width="400" height="200"></canvas>
-                <button id="clearSignature">Limpar Assinatura</button>
-            </div>
-            <button id="confirmSignature">Confirmar Assinatura</button>
+            <button id="confirmSignature">Assinar Documento</button>
+        </div>
+        <div class="assinatura-container" id="assinatura">
+            <p class="titulo">Assinatura: </p>
+            <p class="assinatura-text" id="motoristaNome"></p>
+            <p class="titulo" style="margin-left: 20px;">CPF: </p>
+            <p class="cpf-text" id="motoristaCPF"></p>
         </div>
         <div class="form-section">
-            <!-- Adicione um botão para salvar o PDF -->
             <button id="printButton">Salvar / ou Imprimir</button>
         </div>
         <footer>
@@ -114,61 +139,15 @@
             "EMO8I86": "senha16",
             "EPZ4H01": "senha17",
             "FFN9B29": "senha18",
-            "LSD3E66": "senha19",
-            "PWI3E56": "senha20"
-            // Adicione as senhas para as outras placas conforme necessário
+            "PWIE56": "senha19",
         };
 
-        const signatureCanvas = document.getElementById('signatureCanvas');
-        const confirmSignatureButton = document.getElementById('confirmSignature');
         const placaSelect = document.getElementById('placaSelect');
         const lavagemTable = document.getElementById('lavagemTable').getElementsByTagName('tbody')[0];
-        const savePDFButton = document.getElementById('printButton'); // Botão para salvar o PDF
-        const ctx = signatureCanvas.getContext('2d');
-        let isDrawing = false;
-
-        // Variáveis para rastrear a posição inicial do toque
-        let touchStartX, touchStartY;
-
-        // Função para lidar com eventos de toque
-        function handleStart(event) {
-            isDrawing = true;
-            const touch = event.touches[0];
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-            ctx.beginPath();
-            ctx.moveTo(touch.clientX - signatureCanvas.getBoundingClientRect().left, touch.clientY - signatureCanvas.getBoundingClientRect().top);
-
-            // Impedir a rolagem da página enquanto a assinatura está ativa
-            document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-        }
-
-        function handleMove(event) {
-            if (isDrawing) {
-                const touch = event.touches[0];
-                ctx.lineTo(touch.clientX - signatureCanvas.getBoundingClientRect().left, touch.clientY - signatureCanvas.getBoundingClientRect().top);
-                ctx.stroke();
-
-                // Evitar o movimento da página enquanto você está assinando
-                const deltaX = touch.clientX - touchStartX;
-                const deltaY = touch.clientY - touchStartY;
-                window.scrollBy(-deltaX, -deltaY);
-            }
-        }
-
-        function handleEnd() {
-            isDrawing = false;
-
-            // Restaurar o comportamento normal de rolagem da página
-            document.body.style.overflow = 'auto';
-            document.body.style.position = 'static';
-        }
-
-        // Adicionar manipuladores de eventos de toque
-        signatureCanvas.addEventListener('touchstart', handleStart, false);
-        signatureCanvas.addEventListener('touchmove', handleMove, false);
-        signatureCanvas.addEventListener('touchend', handleEnd, false);
+        const confirmSignatureButton = document.getElementById('confirmSignature');
+        const assinaturaContainer = document.getElementById('assinatura');
+        const motoristaNome = document.getElementById('motoristaNome');
+        const motoristaCPF = document.getElementById('motoristaCPF');
 
         confirmSignatureButton.addEventListener('click', () => {
             const placaSelecionada = placaSelect.value;
@@ -176,13 +155,15 @@
             const senhaInserida = prompt('Digite a senha da placa selecionada:');
 
             if (senhaInserida === senhaPlaca) {
-                // Senha correta, continue com a assinatura
                 senhaErrada.style.display = 'none';
                 senhaObrigatoria.style.display = 'none';
 
-                // Após confirmar a assinatura, preencha automaticamente a tabela com Data da Lavagem, Placa e Nome do Motorista
                 const dataDaLavagem = new Date().toLocaleDateString();
                 const nomeMotorista = placaSelect.options[placaSelect.selectedIndex].text.split(": ")[1];
+
+                motoristaNome.innerHTML = nomeMotorista;
+                const cpfMotorista = prompt('Digite o CPF do motorista:');
+                motoristaCPF.innerHTML = formatarCPF(cpfMotorista);
 
                 const newRow = lavagemTable.insertRow();
                 const cell1 = newRow.insertCell(0);
@@ -192,30 +173,33 @@
                 cell2.innerHTML = placaSelecionada;
                 cell3.innerHTML = nomeMotorista;
 
-                // Habilitar o botão para salvar o PDF
-                printButton.style.display = 'block';
+                assinaturaContainer.style.display = 'block';
             } else if (senhaInserida === null) {
-                // O motorista cancelou a entrada da senha
                 senhaErrada.style.display = 'none';
                 senhaObrigatoria.style.display = 'none';
             } else if (senhaInserida === '') {
-                // Nenhuma senha inserida
                 senhaErrada.style.display = 'none';
                 senhaObrigatoria.style.display = 'block';
             } else {
-                // Senha incorreta
                 senhaObrigatoria.style.display = 'none';
                 senhaErrada.style.display = 'block';
             }
         });
 
-        // Função para abrir a janela de impressão quando o botão de impressão for clicado
+        function formatarCPF(cpf) {
+            // Remove caracteres não numéricos
+            cpf = cpf.replace(/\D/g, '');
+
+            // Adiciona os pontos e o traço
+            cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+
+            return cpf;
+        }
+
+        const printButton = document.getElementById('printButton');
         printButton.addEventListener('click', function () {
-            printButton.style.display = 'none'; // Oculte o botão de impressão antes da impressão
             window.print();
-            printButton.style.display = 'block'; // Restaure o botão de impressão após a impressão
         });
     </script>
 </body>
-
 </html>
