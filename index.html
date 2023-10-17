@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Lavagem de Veículos - Distribuição (CL FD)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <img class="logo" src="logo kuehne-nagel.png" alt="Logo Kuehne + Nagel">
+        <table>
+            <tr>
+                <td colspan="2"><strong>Título:</strong> Controle de Lavagem de Veículos - Distribuição</td>
+                <td><strong>Nº Formulário:</strong> 45050</td>
+                <td><strong>Elaborar:</strong> Aghata Ribeiro</td>
+            </tr>
+            <tr>
+                <td><strong>Data Elaboração:</strong> 27/09/2022</td>
+                <td><strong>Validade:</strong> 24 meses após efetivação</td>
+                <td><strong>Pág.</strong> 1 de 1</td>
+                <td><strong>Versão:</strong> 01</td>
+            </tr>
+            <tr>
+                <td colspan="4"><strong>Aprovador:</strong> Tiago Garcia</td>
+            </tr>
+        </table>
+        <div class="form-section">
+            <h2>Instrução de Lavagem:</h2>
+            <p>O produto utilizado na lavagem dos veículos (realizada de forma caseira) deve ser um produto neutro e sem
+                odor. Para a aplicação, o detergente neutro deve ser diluído em um recipiente com água, o qual
+                posteriormente será aplicado dentro do veículo. Após a aplicação, o produto químico deve ser retirado
+                com água e seco com pano limpo.</p>
+        </div>
+        <br><br>
+        <label for="placaSelect">Escolha a Placa:</label>
+        <select id="placaSelect">
+            <option value="">--- Escolha a Placa ---</option>
+            <option value="EFV1235">EFV1235: ALDINER ELVIRA</option>
+            <option value="FWP8C06">FWP8C06: CLECIO OLIVEIRA DA SILVA</option>
+            <option value="ELW3539">ELW3539: GIULIANO BELLONI DE FREITAS</option>
+            <option value="EKH9355">EKH9355: JOCICLEO DELMONDES LOPES DE OLIVEIRA</option>
+            <option value="EYK2849">EYK2849: JOSENILTON AMARO ANGELIM</option>
+            <option value="EZL7756">EZL7756: LUIZ OTAVIO TEIXEIRA FRANCO</option>
+            <option value="ELW2349">ELW2349: MARCOS AURELIO GOMES DE ABREU</option>
+            <option value="DGZ4673">DGZ4673: MAURÍCIO PENHA BARONI</option>
+            <option value="EUV9555">EUV9555: RENATO APARECIDO VIEIRA DA SILVA</option>
+            <option value="DTC9156">DTC9156: WILLIAM DE LIMA ROCHA</option>
+            <option value="DYH0H63">DYH0H63: BRYAN WILLIANS BARREIRA SILVA</option>
+            <option value="FUJ2F42">FUJ2F42: CICERO REIS</option>
+            <option value="AQV1D10">AQV1D10: EDEGARD ALVARENGA DE OLIVEIRA</option>
+            <option value="EMU7040">EMU7040: EDUARDO MOISES CAMIZA</option>
+            <option value="GHG8H07">GHG8H07: ERIKA RAMOS SILVA</option>
+            <option value="EMO8I86">EMO8I86: IAN EUFRASIO BEZERRA</option>
+            <option value="EPZ4H01">EPZ4H01: LUIZ DANIEL DE PONTES</option>
+            <option value="FFN9B29">FFN9B29: WELLINGTON BUENO DA SILVA</option>
+            <option value="LSD3E66">LSD3E66: LEANDRO MORAU GOMES</option>
+            <option value="PWI3E56">PWI3E56: LEANDRO SILVEIRA REIS</option>
+        </select>
+        <p id="senhaErrada" style="color: red; display: none;">Senha incorreta!</p>
+        <p id="senhaObrigatoria" style="color: red; display: none;">Por favor, digite a senha.</p>
+        <table id="lavagemTable">
+            <thead>
+                <tr>
+                    <th>Data da Lavagem</th>
+                    <th>Placa</th>
+                    <th>Nome do Motorista</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aqui você pode adicionar as entradas da tabela dinamicamente -->
+            </tbody>
+        </table>
+        <div class="form-section">
+            <div class="signature-container">
+                <canvas id="signatureCanvas" width="400" height="200"></canvas>
+            </div>
+            <button id="confirmSignature">Confirmar Assinatura</button>
+        </div>
+        <div class="form-section">
+            <!-- Adicione um botão para salvar o PDF -->
+            <button id="printButton">Salvar / ou Imprimir</button>
+        </div>
+        <footer>
+            <p>Página criada por Lucas Gomes - Analista - FD</p>
+        </footer>
+    </div>
+
+    <!-- Inclua a CDN do html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+    <!-- Adicione as senhas correspondentes às placas aqui -->
+    <script>
+        const senhas = {
+            "EFV1235": "senha1",
+            "FWP8C06": "senha2",
+            "ELW3539": "senha3",
+            "EKH9355": "senha4",
+            "EYK2849": "senha5",
+            "EZL7756": "senha6",
+            "ELW2349": "senha7",
+            "DGZ4673": "senha8",
+            "EUV9555": "senha9",
+            "DTC9156": "senha10",
+            "DYH0H63": "senha11",
+            "FUJ2F42": "senha12",
+            "AQV1D10": "senha13",
+            "EMU7040": "senha14",
+            "GHG8H07": "senha15",
+            "EMO8I86": "senha16",
+            "EPZ4H01": "senha17",
+            "FFN9B29": "senha18",
+            "LSD3E66": "senha19",
+            "PWI3E56": "senha20"
+            // Adicione as senhas para as outras placas conforme necessário
+        };
+
+
+        // Restante do seu código
+        const signatureCanvas = document.getElementById('signatureCanvas');
+        const confirmSignatureButton = document.getElementById('confirmSignature');
+        const placaSelect = document.getElementById('placaSelect');
+        const lavagemTable = document.getElementById('lavagemTable').getElementsByTagName('tbody')[0];
+        const savePDFButton = document.getElementById('savePDF'); // Botão para salvar o PDF
+        const ctx = signatureCanvas.getContext('2d');
+        let isDrawing = false;
+
+        signatureCanvas.addEventListener('mousedown', () => {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(event.clientX - signatureCanvas.getBoundingClientRect().left, event.clientY - signatureCanvas.getBoundingClientRect().top);
+        });
+
+        signatureCanvas.addEventListener('mousemove', () => {
+            if (isDrawing) {
+                ctx.lineTo(event.clientX - signatureCanvas.getBoundingClientRect().left, event.clientY - signatureCanvas.getBoundingClientRect().top);
+                ctx.stroke();
+            }
+        });
+
+        signatureCanvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+
+        confirmSignatureButton.addEventListener('click', () => {
+            const placaSelecionada = placaSelect.value;
+            const senhaPlaca = senhas[placaSelecionada];
+            const senhaInserida = prompt('Digite a senha da placa selecionada:');
+
+            if (senhaInserida === senhaPlaca) {
+                // Senha correta, continue com a assinatura
+                senhaErrada.style.display = 'none';
+                senhaObrigatoria.style.display = 'none';
+
+                // Após confirmar a assinatura, preencha automaticamente a tabela com Data da Lavagem, Placa e Nome do Motorista
+                const dataDaLavagem = new Date().toLocaleDateString();
+                const nomeMotorista = placaSelect.options[placaSelect.selectedIndex].text.split(": ")[1];
+
+                const newRow = lavagemTable.insertRow();
+                const cell1 = newRow.insertCell(0);
+                const cell2 = newRow.insertCell(1);
+                const cell3 = newRow.insertCell(2);
+                cell1.innerHTML = dataDaLavagem;
+                cell2.innerHTML = placaSelecionada;
+                cell3.innerHTML = nomeMotorista;
+
+                // Habilitar o botão para salvar o PDF
+                savePDFButton.removeAttribute('disabled');
+            } else if (senhaInserida === null) {
+                // O motorista cancelou a entrada da senha
+                senhaErrada.style.display = 'none';
+                senhaObrigatoria.style.display = 'none';
+            } else if (senhaInserida === '') {
+                // Nenhuma senha inserida
+                senhaErrada.style.display = 'none';
+                senhaObrigatoria.style.display = 'block';
+            } else {
+                // Senha incorreta
+                senhaObrigatoria.style.display = 'none';
+                senhaErrada.style.display = 'block';
+            }
+        });
+
+        // Função para abrir a janela de impressão quando o botão de impressão for clicado
+        document.getElementById('printButton').addEventListener('click', function () {
+            window.print();
+        });
+
+    </script>
+</body>
+
+</html>

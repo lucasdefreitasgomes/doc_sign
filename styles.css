@@ -1,0 +1,181 @@
+/* Estilo Global */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    font-size: 14px; /* Tamanho da fonte padrão */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #003369; /* Cor da Kuehne + Nagel */
+    font-size: 24px; /* Tamanho da fonte do título */
+}
+
+/* Estilo para o logo */
+.logo {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    max-width: 100%; /* O logo se ajustará automaticamente à largura do contêiner pai */
+    height: auto; /* A altura será ajustada automaticamente para manter a proporção */
+}
+
+/* Estilo para Tabelas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+    font-size: 12px; /* Tamanho da fonte das células da tabela */
+}
+
+/* Estilo para a Área de Assinatura */
+.signature-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#signatureCanvas {
+    border: 1px solid #000;
+}
+
+/* Estilo para Botão */
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Cor da Kuehne + Nagel */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px; /* Tamanho da fonte do botão */
+}
+
+/* Estilo para Select */
+select {
+    padding: 5px;
+    width: 100%;
+    font-size: 14px; /* Tamanho da fonte do select */
+}
+
+/* Media Query para Telas Menores (Tablets e Celulares) */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    table {
+        margin-top: 10px;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 12px; /* Tamanho da fonte das células da tabela em telas menores */
+    }
+
+    /* Reduza o tamanho do logo em telas menores */
+    .logo {
+        max-width: 80%; /* Você pode ajustar o valor conforme necessário */
+    }
+}
+
+/* Media Query para Telas de Smartphone (320px a 480px) */
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 20px; /* Reduza o tamanho do título em smartphones */
+    }
+
+    table {
+        font-size: 10px; /* Reduza o tamanho da fonte da tabela em smartphones */
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    .signature-container {
+        font-size: 12px; /* Ajuste o tamanho da fonte da área de assinatura */
+    }
+
+    button {
+        font-size: 12px; /* Ajuste o tamanho da fonte do botão em smartphones */
+    }
+
+    select {
+        font-size: 12px; /* Ajuste o tamanho da fonte do select em smartphones */
+    }
+}
+
+/* Estilo para o rodapé */
+footer {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 10px 0;
+}
+
+footer p {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Estilos para impressão */
+@media print {
+    /* Remova elementos que você não deseja imprimir */
+    .no-print {
+        display: none;
+    }
+
+    /* Ajuste o tamanho da fonte para impressão */
+    body {
+        font-size: 12px;
+    }
+
+    /* Estilos específicos para tabelas de impressão */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        page-break-inside: auto; /* Evita que as tabelas sejam divididas em páginas */
+    }
+
+    th, td {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+
+    /* Estilos para cabeçalho e rodapé de página */
+    header, footer {
+        display: none; /* Remova cabeçalhos e rodapés padrão */
+    }
+
+    /* Estilo para o rodapé personalizado de impressão */
+    .print-footer {
+        text-align: center;
+        font-size: 10px;
+    }
+
+    /* button {
+        display: none;
+    } */
+
+    /* Outros estilos específicos de impressão, se necessário */
+}
